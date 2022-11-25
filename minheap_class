@@ -1,0 +1,166 @@
+class MinHeap:
+    def __init__(self, capacity):
+        self.backet = [0]*capacity
+        self.capacity = capacity
+        self.size = 0
+        
+    def indexparent(self, index):
+        return (index -1)//2
+    def indexRightChild(self, index):
+        return 2*index + 2
+    def indexLeftChild(self, index):
+        return 2*index +1
+    def hasParent(self, index):
+        return self.indexparent(index)>=0
+    def hasLeftChild(self, index):
+        return self.indexLeftChild(index)<self.size
+    def hasRightChild(self, index):
+        return self.indexRightChild(index)<self.size
+    def parent(self, index):
+        return self.backet[self.indexparent(index)]
+    def leftchild(self, index):
+        return self.backet[self.indexLeftChild(index)]
+    def rightchild(self, index):
+        return self.backet[self.indexRightChild(index)]
+    def isFull(self):
+        return self.size == self.capacity
+    def swap(self, index1, index2):
+        temp = self.backet[index1]
+        self.backet[index1] = self.backet[index2]
+        self.backet[index2] = temp
+    def CheckingEmpty(self):
+        if self.size == 0:
+            print("Empty heap")
+        else:
+            print("Heap is not empty")
+          
+#insertion
+    def insertion(self, data, value):
+        if(self.isFull()):
+            raise("Heap is Full")
+        self.backet[self.size] = (data, value)
+        self.size += 1
+        self.heap_Up(self.size - 1)
+        
+    def heap_Up(self, index):
+        if(self.hasParent(index) and self.parent(index) > self.backet[index]):
+            self.swap(self.indexparent(index), index)
+            self.heap_Up(self.indexparent(index))
+#deletion        
+    def removeMin(self):
+        if(self.size == 0):
+            raise("Empty Heap")
+        (data, value) = self.backet[0]
+        self.backet[0] = self.backet[self.size -1]
+        self.size -= 1
+        self.heap_Down(0)
+        return (data, value)
+    
+    def heap_Down(self,index):
+        smallest = index 
+        if(self.hasLeftChild(index) and self.backet[smallest] > self.leftchild(index)): 
+            smallest = self.indexLeftChild(index)
+        if(self.hasLeftChild(index) and self.backet[smallest] > self.leftchild(index)):
+            smallest = self.indexLeftChild(index)
+        if(self.hasRightChild(index) and self.backet[smallest] > self.rightchild(index)):
+            smallest = self.indexRightChild(index)
+        if(smallest != index):
+            self.swap(index, smallest)
+            self.heap_Down(smallest)   
+#find the minimun == root of the heap tree            
+    def FindMin(self):
+        if self.size == 0:
+            print("Empty Heap")
+        else:
+            (data, value) = self.backet[0]
+            return (data, value)
+    
+#sorting the heap   
+    def heapSort(self, element):
+        for j in range((len(element)-2)//2, -1, -1):
+            self.siftDown(element, j, len(element))
+        for end in range(len(element)-1, 0, -1):
+            self.swapinList(element, 0, end)
+            self.siftDown(element, 0, end)
+        
+#swaping inside list
+    def swapinList(self, element, i, j):
+        element[i], element[j] = element[j], element[i]
+        
+#pushing the max down       
+    def siftDown(self, element, i, upper):
+        while(True):
+            l, r = i*2+1, i*2+2
+            if max(l, r) < upper:
+                if element[i] >= max(element[l], element[r]):
+                    break
+                elif element[l] > element[r]:
+                    self.swapinList(element, i, l)
+                    i=l
+                else:
+                    self.swapinList(element, i, r)
+                    i=r
+            elif l< upper:
+                if element[l] > element[i]:
+                    self.swapinList(element, i, l)
+                    i = l
+                else:
+                    break
+            elif r < upper:
+                if element[r]> element[i]:
+                    self.swapinList(element, i, r)
+                    i = r
+                else: 
+                    break
+            else:
+                break        
+            
+print("===============PART1===========\nCreating of an empty min Heap H of capacity 10\n")
+H = MinHeap(10)
+print("Insertion of (key, value) =(43, 9.12) in H")
+H.insertion(43, 9.12)
+print("Insertion of (key, value) =(34, 5.12) in H")
+H.insertion(34, 5.12)
+print("Insertion of (key, value) =(36, 6.134) in H") 
+H.insertion(36, 6.134)
+print("Insertion of (key, value) =(102, 123.09) in H") 
+H.insertion(102, 123.09)
+print("Insertion of (key, value) =(87, 5.12) in H") 
+H.insertion(87, 5.12) 
+print("\n")
+print("Finding minimun and delete it")
+print(H.removeMin())
+print(H.removeMin())
+print(H.removeMin())
+print("\n")
+print("The current minmum is:",H.FindMin())
+print("\n")
+print("Finding minimun and delete it")
+print(H.removeMin())
+print("\n")
+H.CheckingEmpty()
+print("\n")
+print("The current minimum is:", H.FindMin())
+print("\n")
+print("Finding minimun and delete it")
+print(H.removeMin())
+print("\n")
+print("The minimun value is:", H.FindMin() )
+
+
+print("\n===========PART 2==========")
+print("heapSort of the list")
+element = [(43, 9.12), (34, 5.12), (36, 6.134), (102, 123.09), (87, 5.12), (43, 12.90), (55, 51.12), (31, 1.134)]
+H.heapSort(element)
+print("\nSorted list of (key, value) pairs:")
+print(element)
+print("\n")
+
+    
+        
+        
+        
+        
+                
+    
+    
